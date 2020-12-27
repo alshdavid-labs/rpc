@@ -3,15 +3,13 @@ import { ID } from "./id"
 import { EventSenderReceiver, EventData, TargetAction, TargetResult } from "./types"
 
 export class Receiver {
-  private _bus: EventSenderReceiver
   private _refCache = new Map<string, any>()
 
   constructor(
-    bus: any,
+    private _bus: EventSenderReceiver,
     private _target: any,
   ) {
-    this._bus = bus
-    bus.addEventListener('message', this._onMessage)
+    _bus.addEventListener('message', this._onMessage)
   }
 
   private _onMessage = ({ data }: EventData<TargetAction>) => {

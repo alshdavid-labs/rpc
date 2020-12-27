@@ -3,17 +3,15 @@ import { Subject, firstValueFrom } from "./subject"
 import { EventSenderReceiver, TargetResult, TargetArgument, EventData, TargetAction } from "./types"
 
 export class Handle {
-  private _bus: EventSenderReceiver
   private _requests = new Map<string, Subject<TargetResult>>()
   private _callbackCache = new Map<string, Function>()
 
   constructor(
-    bus: any,
+    private _bus: EventSenderReceiver,
     private _path: string[] = [],
     private _ref?: string,
   ) {
-    this._bus = bus
-    bus.addEventListener('message', this._onMessage)
+    _bus.addEventListener('message', this._onMessage)
   }
 
   public async value<T>(): Promise<T> {
