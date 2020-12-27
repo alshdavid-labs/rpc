@@ -1,6 +1,6 @@
 {
   "name": "@alshdavid/intercom",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "David Alsh",
   "types": "./index.d.ts",
   "main": "./index.js"
