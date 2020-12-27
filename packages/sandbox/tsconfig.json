@@ -11,7 +11,10 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "lib": ["DOM", "ESNext"],
-    "types": []
+    "types": [],
+    "paths": {
+      "@alshdavid/weblink": ["../intercom/src/index"]
+    }
   },
   "include": ["src/**/*"]
 }

@@ -8,15 +8,21 @@ export interface EventSenderReceiver {
   postMessage<T>(eventData: T): void
 }
 
-export type ExecutionEvent = {
-  id: number
-  name: any
-  path: string[]
-  args: any[]
+export type TargetArgument = { 
+  type: 'basic' | 'function'
+  value: any
 }
 
-export type ExecutionResult<T> = {
-  id: number
-  result: T
-  type: 'function' | 'value'
+export type TargetAction = {
+  id: string
+  action: 'exec' | 'value'
+  path: string[]
+  ref?: string
+  args?: TargetArgument[]
+}
+
+export type TargetResult = {
+  id: string
+  value: unknown
+  action: 'result' | 'callback'
 }
