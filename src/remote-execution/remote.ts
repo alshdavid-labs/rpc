@@ -1,23 +1,23 @@
-export class Query {
-  value<T>(): Promise<T> {
+// export class Handle {
+//   value<T>(): Promise<T> {
 
-  }
+//   }
 
-  stream<T>(): Observable<T> {
+//   stream<T>(): Observable<T> {
 
-  }
+//   }
 
-  method(): Query {
+//   method(): Handle {
 
-  }
+//   }
 
-  property(): Query {
+//   property(): Handle {
     
-  }
-}
+//   }
+// }
 
-export class Remote {
-  service(token: string | number): Query {
+// export class Remote {
+//   service(token: string | number): Handle {
 
-  }
-}
+//   }
+// }

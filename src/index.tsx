@@ -1,57 +1,70 @@
-import { Observable } from 'rxjs'
 // @ts-ignore
 import Worker from 'worker-loader?inline=no-fallback!./index.worker'
-// import { Remote } from './remote-execution'
+import { Handle } from './remote-execution'
 
-interface Remote {
-  service(token: string | number): Query
-}
-
-interface Query {
-  value<T>(): Promise<T>
-  stream<T>(): Observable<T>
-  method(name: string, args?: any[]): Query
-  property(name: string): Query
-}
-
-// // @ts-ignore
 const worker = new Worker()
+const handle = new Handle(worker)
 
-worker.postMessage({}, [])
-
-
-const remote = {} as Remote
-
-  remote
-    .service('foo')
-    .method('bar', [1,2,3,4])
-    .value<any>()
-    .then(console.log)
-
-  remote
-    .service('foo')
-    .method('onValue', [1])
-    .method('subscribe')
-    .stream<any>()
-    .subscribe(console.log)
+void async function() {
+  await handle
+    .exec((v:any) => console.log(v))
+}()
 
 
+// void async function() {
+//   const ref1 = await handle
+//     .property('foo')
+//     .exec()
+  
+//   const ref2 = await ref1
+//     .property('bar')
+//     .exec('test')
 
-
-// void async function main() {
-//   // remote.exec('foo')
-
-
-  // const un = remote.observe('foo', ['onValue', 'subscribe']).subscribe(v => console.log(v))
-
-  // const getOnValue = await remote.exec('foo', ['getOnValue'], ['updated:'])
-  // getOnValue
-
-  // const value1 = await remote.exec('foo', ['setValue'], ['update1'])
-
-  // un.unsubscribe()
-
-  // const value2 = await remote.exec('foo', ['setValue'], ['update2'])
-
-  // console.log(value1, value2)
+//   const result = await ref2
+//     .value()
+  
+//   console.log(result)
 // }()
+
+// void async function() {
+//   const ref = await handle.exec('value')
+//   console.warn(await ref.value())
+// }
+
+// void async function() {
+//   const ref = await handle
+//     .property('foo')
+//     .exec('value')
+
+//   const result = await ref.value()
+//   console.log(result)
+// }
+
+// void async function() {
+//   const ref = await handle
+//     .property('foo')
+//     .exec('value')
+  
+//   const result = await ref
+//     .property('bar')
+//     .value()
+  
+//   console.log(result)
+// }
+
+// void async function() {
+//   handle
+//     .value()
+//     .then(console.warn)
+// }
+
+// void async function() {
+//   handle
+//     .property('foo')
+//     .property('bar')
+//     .value()
+//     .then(console.warn)
+// }
+
+
+

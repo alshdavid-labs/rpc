@@ -1,39 +1,39 @@
 
 
+import { Receiver } from './remote-execution'
 
+// const target = (v: any) => {
+//   console.log(v)
+//   return v + 'result'
+// }
 
-// import { Context } from './remote-execution'
-// import { BehaviorSubject } from 'rxjs'
-// import { map } from 'rxjs/operators'
+// const target = 'value'
 
-// class Foo {
-//   value = 'hello'
-//   onValue = new BehaviorSubject(this.value)
+// const target = {
+//   foo: 'bar'
+// }
 
-//   getOnValue(...args: string[]) {
-//     return this.onValue.pipe(map(v => `${v} ${args.join(', ')}`))
-//   }
-
-//   getValue(...args: string[]) {
-//     return {
-//       value: this.value,
-//       args
-//     }
-//   }
-
-//   getSetValue() {
-//     return (update: string) => {
-//       return () => this.setValue(update)
-//     }
-//   }
-
-//   setValue(update: string) {
-//     this.value = update
-//     this.onValue.next(update)
-//     return true
+// const target = {
+//   foo: {
+//     bar: 'foobar'
 //   }
 // }
 
-// const ctx = new Context(self as any)
+// const target = {
+//   foo: (v: any) => {
+//     console.log(v)
+//     return v + 'result'
+//   }
+// }
 
-// ctx.provide('foo', new Foo)
+
+const target = {
+  foo: () => {
+    return {
+      bar: (text: string) => text + '===' + text 
+    }
+  }
+}
+
+new Receiver(self, target)
+
