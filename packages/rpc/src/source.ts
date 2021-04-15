@@ -2,13 +2,19 @@ import { get } from './get';
 import { ID } from './id';
 import { ITarget, EventData, TargetAction, TargetResult } from './types';
 
-export interface ISource {}
+export interface ISource {
+  destroy(): void
+}
 
 export class Source implements Source {
   private _refCache = new Map<string, any>();
 
   constructor(private _target: ITarget, private _data: any) {
     _target.addEventListener('message', this._onMessage);
+  }
+
+  public destroy() {
+    this._target.removeEventListener('message', this._onMessage);
   }
 
   private _onMessage = ({ data }: EventData<TargetAction>) => {
