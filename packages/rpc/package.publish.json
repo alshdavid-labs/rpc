@@ -1,6 +1,7 @@
 {
-  "name": "@alshdavid/intercom",
-  "version": "1.0.2",
+  "name": "@alshdavid/rpc",
+  "version": "1.0.1",
+  "license": "MIT",
   "author": "David Alsh",
   "types": "./index.d.ts",
   "main": "./index.js"
