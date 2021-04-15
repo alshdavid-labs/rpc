@@ -1,12 +1,11 @@
-import { Subject } from 'rxjs'
-import { Receiver } from '@alshdavid/intercom'
+import { createSource } from '@alshdavid/rpc'
+import { Source } from './types'
 
-const target = new Subject()
-let i = -1
+self.addEventListener('message', event => {
+  const [ port2 ] = event.ports
 
-setInterval(() => {
-  i++
-  target.next(i)
-}, 1000)
+  const source: Source = { foo: 'bar' }
+  createSource(port2, source)
+  port2.start()
+})
 
-new Receiver(self, target)

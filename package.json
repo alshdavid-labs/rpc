@@ -1,5 +1,5 @@
 {
-  "name": "@alshdavid/weblink",
+  "name": "@alshdavid/rpc",
   "private": "true",
   "workspaces": [
     "packages/*"

@@ -1,19 +1,13 @@
 // @ts-ignore
 import Worker from 'worker-loader?inline=no-fallback!./index.worker'
-import { Handle } from '@alshdavid/intercom'
-
-const worker = new Worker()
-const handle = new Handle(worker)
-
+import { createHandle } from '@alshdavid/rpc'
+import { Source } from './types'
 
 void async function() {
-  const sub = await handle
-    .property('subscribe')
-    .exec((v:any) => console.log(v))
+  const { port1, port2 } = new MessageChannel()
+  const worker = new Worker()
+  worker.postMessage(undefined, [port2])
 
-  await new Promise(res => setTimeout(res, 3000))
-
-  await sub
-    .property('unsubscribe')
-    .exec()
+  const h0 = createHandle<Source>(port1)
+  console.log(await h0.property('foo').value())
 }()

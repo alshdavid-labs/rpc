@@ -13,7 +13,7 @@
     "lib": ["DOM", "ESNext"],
     "types": [],
     "paths": {
-      "@alshdavid/weblink": ["../intercom/src/index"]
+      "@alshdavid/rpc": ["../rpc/src/index"]
     }
   },
   "include": ["src/**/*"]
