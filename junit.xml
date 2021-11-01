@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="3" failures="0" errors="0" time="1.131">
+  <testsuite name="MessageChannel" errors="0" failures="0" skipped="0" timestamp="2021-11-01T11:34:42" time="1.007" tests="2">
+    <testcase classname="MessageChannel constructor should not throw" name="MessageChannel constructor should not throw" time="0.001">
+    </testcase>
+    <testcase classname="MessageChannel instance should send message to other port" name="MessageChannel instance should send message to other port" time="0.001">
+    </testcase>
+  </testsuite>
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-11-01T11:34:43" time="0.071" tests="1">
+    <testcase classname=" should" name=" should" time="0">
+    </testcase>
+  </testsuite>
+</testsuites>

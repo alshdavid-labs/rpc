@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "commonjs",
+    "sourceMap": true,
+    "noUnusedLocals": false
+  },
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts",
+  ]
+}
