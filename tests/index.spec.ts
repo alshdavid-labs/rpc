@@ -22,4 +22,15 @@ describe('Integration', () => {
   
     dataSource.close()
   })
+
+  it('Should send a basic value', async () => {
+    const data = { foo: { bar: { value: 'foobar' }}}
+    const dataConsumer = new DataConsumer<typeof data>(port1)
+    const dataSource = new DataSource(data, port2)
+  
+    const value = await dataConsumer.property('foo', 'bar').value()
+    expect(value).toBe(data)
+  
+    dataSource.close()
+  })
 })

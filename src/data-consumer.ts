@@ -10,6 +10,10 @@ export class DataConsumer<T> implements IReference<T> {
     this.#messagePort = messagePort
   }
 
+  property: IReference<T>['property'] = () => {
+    return {} as any
+  }
+
   value: IReference<T>['value'] = () => {
     return Promise.resolve<any>({})
   }
