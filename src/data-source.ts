@@ -14,8 +14,8 @@ export class DataSource implements IDataSource {
   #valueCache: Map<string, any>
 
   constructor(
+    messagePort: IMessagePort,
     data: any,
-    messagePort: IMessagePort
   ) {
     this.#data = data
     this.#valueCache = new Map()

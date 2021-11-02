@@ -21,7 +21,7 @@ describe('IReferenceObject', () => {
 
   it('Should send a basic value', async () => {
     const data = { foo: { bar: { value: 'foobar' }}}
-    source = new DataSource(data, port2)
+    source = new DataSource(port2, data)
     const ref0 = new Reference<typeof data>(port1)
   
     const ref1 = ref0.property('foo', 'bar', 'value')
@@ -31,7 +31,7 @@ describe('IReferenceObject', () => {
 
   it('Should set a value', async () => {
     const data = { foo: 'foo' }
-    source = new DataSource(data, port2)
+    source = new DataSource(port2, data)
     const ref0 = new Reference<typeof data>(port1)
   
     const ref1 = ref0.property('foo')

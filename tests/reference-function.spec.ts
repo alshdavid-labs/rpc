@@ -23,7 +23,7 @@ describe('IReferenceFunction', () => {
 
   it('Should execute a function', async () => {
     const data = jest.fn()
-    source = new DataSource(data, port2)
+    source = new DataSource(port2, data)
     const ref0 = new Reference<typeof data>(port1)
     
     await ref0.exec()
@@ -32,14 +32,14 @@ describe('IReferenceFunction', () => {
 
   it('Should propagate a exception', async () => {
     const data = () => {throw new Error(MOCK_VALUE)}
-    source = new DataSource(data, port2)
+    source = new DataSource(port2, data)
     const ref0 = new Reference<typeof data>(port1)
     await expect(ref0.exec()).rejects.toThrow()
   })
 
   it('Should allow traversal of error in exception', async () => {
     const data = () => {throw new Error(MOCK_VALUE)}
-    source = new DataSource(data, port2)
+    source = new DataSource(port2, data)
     const ref0 = new Reference<typeof data>(port1)
     let message: string | undefined
     try {
@@ -52,7 +52,7 @@ describe('IReferenceFunction', () => {
 
   it('Should return values', async () => {
     const data = () => 'foo'
-    source = new DataSource(data, port2)
+    source = new DataSource(port2, data)
     const ref0 = new Reference<typeof data>(port1)
     
     const ref1 = await ref0.exec()
@@ -62,7 +62,7 @@ describe('IReferenceFunction', () => {
 
   it('Should release cached returned value', async () => {
     const data = () => 'foo'
-    source = new DataSource(data, port2)
+    source = new DataSource(port2, data)
     const ref0 = new Reference<typeof data>(port1)
     
     const ref1 = await ref0.exec()
@@ -74,7 +74,7 @@ describe('IReferenceFunction', () => {
 
   it('Should forward basic arguments to function', async () => {
     const data = jest.fn<void, [string]>()
-    source = new DataSource(data, port2)
+    source = new DataSource(port2, data)
     const ref0 = new Reference<typeof data>(port1)
     
     await ref0.exec(MOCK_VALUE)
@@ -85,7 +85,7 @@ describe('IReferenceFunction', () => {
 
   it('Should accept function as parameter', async () => {
     const data = jest.fn().mockImplementation((cb: () => void) => cb())
-    source = new DataSource(data, port2)
+    source = new DataSource(port2, data)
     const ref0 = new Reference<typeof data>(port1)
     
     const callback = jest.fn()
@@ -99,7 +99,7 @@ describe('IReferenceFunction', () => {
 
   it('Should pass variables to callback as references', async () => {
     const data = (callback: (value: string) => void) => callback(MOCK_VALUE)
-    source = new DataSource(data, port2)
+    source = new DataSource(port2, data)
     const ref0 = new Reference<typeof data>(port1)
     
     const argRef0: IReference<string> & IReleasable = await new Promise(res => {
@@ -120,7 +120,7 @@ describe('IReferenceFunction', () => {
       cb(next)
     }
 
-    source = new DataSource(data, port2)
+    source = new DataSource(port2, data)
     const ref0 = new Reference<typeof data>(port1)
 
     await new Promise<void>(res => {

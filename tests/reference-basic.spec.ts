@@ -21,7 +21,7 @@ describe('IReferenceBasic', () => {
 
   it('Should send a basic value', async () => {
     const data = 'Foo'
-    source = new DataSource(data, port2)
+    source = new DataSource(port2, data)
     const ref0 = new Reference<typeof data>(port1)
     
     const value = await ref0.value()

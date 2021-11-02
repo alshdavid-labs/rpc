@@ -6,7 +6,7 @@ if (fs.existsSync(path.join(__dirname, 'dist', 'umd'))) {
 }
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: 'hidden-nosources-source-map',
   entry:  path.join(__dirname, 'src', 'index.ts'),
   output: {
     filename: 'index.js',

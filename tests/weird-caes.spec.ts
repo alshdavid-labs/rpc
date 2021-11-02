@@ -23,7 +23,7 @@ describe('SendHelp', () => {
 
   it('Object with a function', async () => {
     const data = { foo: () => MOCK_VALUE }
-    source = new DataSource(data, port2)
+    source = new DataSource(port2, data)
     const ref0 = new Reference<typeof data>(port1)
     
     const ref1 = ref0.property('foo')
