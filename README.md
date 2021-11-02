@@ -2,7 +2,7 @@
 
 ### Workers and iFrames
 
-This library serves to be a low level RPC implementation for JavaScript that allows for the accessing of data and calling of functions/methods that live in an external context.
+This library serves to be a tiny (3kb), low level RPC implementation for JavaScript that allows for the accessing of data and calling of functions/methods that live in an external context.
 
 Such use cases are iframes and web workers. This can also be used with web sockets for cooperative server side execution.
 
