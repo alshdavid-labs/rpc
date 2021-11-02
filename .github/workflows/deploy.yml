@@ -25,6 +25,8 @@ jobs:
         echo cp1
         aws s3 cp ./dist/umd/index.js s3://alshdavid-public/rpc/latest.js
         echo cp2
+        ls
+        ls ./dist/
         ls ./dist/umd/
         aws s3 cp ./dist/umd/index.js "s3://alshdavid-public/rpc/${VERSION}.js"
         echo cf1
