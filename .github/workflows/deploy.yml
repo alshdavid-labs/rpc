@@ -23,19 +23,21 @@ jobs:
         aws-region: ap-southeast-2
     - name: Upload HTML to AWS
       run: |
-        export VERSION=$(node -e "console.log(require('./package.json').version.replaceAll('-', '~').replaceAll('.', '-'))")
         yarn
         yarn build
-        # aws s3 rm --recursive s3://alshdavid-public/rpc/latest
-        echo cp1
-        aws s3 cp ./dist/umd/index.js s3://alshdavid-public/rpc/latest.js
-        echo cp2
-        
-        aws s3 cp ./dist/umd/index.js "s3://alshdavid-public/rpc/${VERSION}.js"
-        echo cf1
-        aws cloudfront create-invalidation --distribution-id E2QHY39OWRUCEU --paths /latest.js
+
+        export IS_NEXT=$(node -e "console.log(require('./package.json').version.contains('-')")
+
+        if [ "$IS_NEXT" = "true" ]; then
+          export VERSION=$(node -e "console.log(require('./package.json').version.split('-')[0].replaceAll('.', '-'))")
+          aws s3 cp ./dist/umd/index.js s3://alshdavid-public/rpc/next.js
+          aws s3 cp ./dist/umd/index.js s3://alshdavid-public/rpc/next/${VERSION}.js
+          aws cloudfront create-invalidation --distribution-id E2QHY39OWRUCEU --paths /next.js
+        else
+          export VERSION=$(node -e "console.log(require('./package.json').version.replaceAll('.', '-'))")
+          aws s3 cp ./dist/umd/index.js s3://alshdavid-public/rpc/latest.js
+          aws s3 cp ./dist/umd/index.js "s3://alshdavid-public/rpc/${VERSION}.js"
+          aws cloudfront create-invalidation --distribution-id E2QHY39OWRUCEU --paths /latest.js
+        fi       
       env:
         CI: true
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
