@@ -1,5 +1,6 @@
 node_modules
 src
+tests
 .gitignore
 jest-setup.ts
 jest.config.js

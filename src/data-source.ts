@@ -1,7 +1,7 @@
 import { Action, ActionExec, ActionRelease, ActionSet, ActionType, ActionValue, ExecArgument, ValueType } from "./actions"
 import { IMessagePort, EventData } from "./messages"
 import { Result, ResultExec, ResultSet, ResultValue, } from "./results"
-import { get, set } from 'lodash'
+import { get, set } from './utils'
 import { ResultRelease } from "./results/result-release"
 
 export interface IDataSource {
