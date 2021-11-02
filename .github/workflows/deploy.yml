@@ -1,0 +1,31 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Upload HTML to AWSq
+      run: |
+        export VERSION=$(node -e "console.log(require('./package.json').version.replaceAll('-', '~').replaceAll('.', '-'))")
+        yarn
+        yarn build
+        aws s3 rm --recursive s3://alshdavid-public/rpc
+        aws s3 cp ./dist/umd/index.js s3://alshdavid-public/rpc/latest.js
+        aws s3 cp ./dist/umd/index.js s3://alshdavid-public/rpc/${VERSION}.js
+        aws cloudfront create-invalidation --distribution-id E2QHY39OWRUCEU --paths /latest.js
+      env:
+        CI: true
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
