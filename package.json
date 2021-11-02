@@ -1,6 +1,6 @@
 {
   "name": "@alshdavid/rpc",
-  "version": "2.0.0-2",
+  "version": "2.0.0-3",
   "author": "David Alsh",
   "license": "MIT",
   "types": "./dist/types/index.d.ts",
