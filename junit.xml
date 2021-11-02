@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="15" failures="0" errors="0" time="1.83">
+  <testsuite name="MessageChannel" errors="0" failures="0" skipped="0" timestamp="2021-11-02T06:00:40" time="1.345" tests="2">
+    <testcase classname="MessageChannel constructor should not throw" name="MessageChannel constructor should not throw" time="0.002">
+    </testcase>
+    <testcase classname="MessageChannel instance should send message to other port" name="MessageChannel instance should send message to other port" time="0.003">
+    </testcase>
+  </testsuite>
+  <testsuite name="SendHelp" errors="0" failures="0" skipped="0" timestamp="2021-11-02T06:00:40" time="1.486" tests="1">
+    <testcase classname="SendHelp Object with a function" name="SendHelp Object with a function" time="0.01">
+    </testcase>
+  </testsuite>
+  <testsuite name="IReferenceObject" errors="0" failures="0" skipped="0" timestamp="2021-11-02T06:00:40" time="1.497" tests="2">
+    <testcase classname="IReferenceObject Should send a basic value" name="IReferenceObject Should send a basic value" time="0.005">
+    </testcase>
+    <testcase classname="IReferenceObject Should set a value" name="IReferenceObject Should set a value" time="0.004">
+    </testcase>
+  </testsuite>
+  <testsuite name="IReferenceBasic" errors="0" failures="0" skipped="0" timestamp="2021-11-02T06:00:40" time="1.511" tests="1">
+    <testcase classname="IReferenceBasic Should send a basic value" name="IReferenceBasic Should send a basic value" time="0.005">
+    </testcase>
+  </testsuite>
+  <testsuite name="IReferenceFunction" errors="0" failures="0" skipped="0" timestamp="2021-11-02T06:00:40" time="1.577" tests="9">
+    <testcase classname="IReferenceFunction Should execute a function" name="IReferenceFunction Should execute a function" time="0.005">
+    </testcase>
+    <testcase classname="IReferenceFunction Should propagate a exception" name="IReferenceFunction Should propagate a exception" time="0.012">
+    </testcase>
+    <testcase classname="IReferenceFunction Should allow traversal of error in exception" name="IReferenceFunction Should allow traversal of error in exception" time="0.008">
+    </testcase>
+    <testcase classname="IReferenceFunction Should return values" name="IReferenceFunction Should return values" time="0.008">
+    </testcase>
+    <testcase classname="IReferenceFunction Should release cached returned value" name="IReferenceFunction Should release cached returned value" time="0.012">
+    </testcase>
+    <testcase classname="IReferenceFunction Should forward basic arguments to function" name="IReferenceFunction Should forward basic arguments to function" time="0.004">
+    </testcase>
+    <testcase classname="IReferenceFunction Should accept function as parameter" name="IReferenceFunction Should accept function as parameter" time="0.005">
+    </testcase>
+    <testcase classname="IReferenceFunction Should pass variables to callback as references" name="IReferenceFunction Should pass variables to callback as references" time="0.011">
+    </testcase>
+    <testcase classname="IReferenceFunction Should handling a callback in the callback" name="IReferenceFunction Should handling a callback in the callback" time="0.006">
+    </testcase>
+  </testsuite>
+</testsuites>
