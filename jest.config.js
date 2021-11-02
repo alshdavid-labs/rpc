@@ -15,7 +15,6 @@ module.exports = {
   ],
   reporters: [
     'default',
-    'jest-junit'
   ],
   testRegex: '.*\\.spec\\.(jsx?|tsx?)$',
   transform: {

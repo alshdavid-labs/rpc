@@ -4,7 +4,21 @@ import { createId } from "../utils"
 export enum ValueType {
   FunctionReference,
   Reference,
+  RemoteReference,
   Direct,
+}
+
+export class RemoteReference {
+  readonly path: string[]
+  readonly cacheKey: string | undefined
+
+  constructor(
+    path: string[],
+    cacheKey: string | undefined,
+  ) {
+    this.path = path
+    this.cacheKey = cacheKey
+  }
 }
 
 export class ExecArgument {

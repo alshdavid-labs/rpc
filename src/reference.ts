@@ -1,14 +1,14 @@
 import { IReference } from "./reference-interface"
-import { Action, ActionExec, ActionRelease, ActionSet, ActionType, ActionValue, ExecArgument, ValueType } from "./actions"
+import { Action, ActionExec, ActionRelease, ActionSet, ActionType, ActionValue, ExecArgument, RemoteReference, ValueType } from "./actions"
 import { sendAction } from "./messages"
 import { EventData, IMessagePort } from "./messages/message-port"
 import { ResultExec, ResultSet, ResultValue, ResultRelease } from "./results"
 import { ReferenceError } from "./reference-error"
 
 class Reference {
+  readonly path: Array<string>
+  readonly cacheKey: string | undefined
   #messagePort: IMessagePort
-  #path: Array<string>
-  #cacheKey: string | undefined
   // These are needed to tell the remote to release callback arguments
   // #remoteCachedArgs: string[]
   #isListening: boolean
@@ -21,24 +21,24 @@ class Reference {
   ) {
     this.#messagePort = messagePort
     this.#parameterCache = new Map()
-    this.#path = path
-    this.#cacheKey = cacheKey
+    this.path = path
+    this.cacheKey = cacheKey
     // this.#remoteCachedArgs = []
     this.#isListening = false
   }
 
   property(...segments: string[]) {
-    return new Reference(this.#messagePort, segments, this.#cacheKey)
+    return new Reference(this.#messagePort, segments, this.cacheKey)
   }
 
   async value() {
-    const action = new ActionValue(this.#path, this.#cacheKey)
+    const action = new ActionValue(this.path, this.cacheKey)
     const result = await sendAction<ResultValue>(this.#messagePort, action)
     return result.value
   }
 
   async set(value: any) {
-    const action = new ActionSet(this.#path, value)
+    const action = new ActionSet(this.path, value)
     await sendAction<ResultSet>(this.#messagePort, action)
   }
 
@@ -46,7 +46,10 @@ class Reference {
     const execArgs: ExecArgument[] = []
     for (const arg of args) {
       let execArg: ExecArgument
-      if (typeof arg === 'function') {
+      if (arg instanceof Reference) {
+        const details = new RemoteReference(arg.path, arg.cacheKey)
+        execArg = new ExecArgument(details, ValueType.RemoteReference)
+      } else if (typeof arg === 'function') {
         execArg = new ExecArgument(null, ValueType.FunctionReference)
         this.#parameterCache.set(execArg.id, arg)
         this.#listenForCallback()
@@ -55,7 +58,7 @@ class Reference {
       }
       execArgs.push(execArg)
     }
-    const action = new ActionExec(this.#path, execArgs, this.#cacheKey)
+    const action = new ActionExec(this.path, execArgs, this.cacheKey)
     const result = await sendAction<ResultExec>(this.#messagePort, action)
     const ref = new Reference(this.#messagePort, [], action.id)
     if (result.hasThrown) {
@@ -71,8 +74,8 @@ class Reference {
     if (this.#parameterCache.size) {
       this.#parameterCache.clear()
     }
-    if (this.#cacheKey) {
-      const action = new ActionRelease(this.#cacheKey)
+    if (this.cacheKey) {
+      const action = new ActionRelease(this.cacheKey)
       await sendAction<ResultRelease>(this.#messagePort, action)
     }
   }

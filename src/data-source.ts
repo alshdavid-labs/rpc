@@ -1,4 +1,4 @@
-import { Action, ActionExec, ActionRelease, ActionSet, ActionType, ActionValue, ExecArgument, ValueType } from "./actions"
+import { Action, ActionExec, ActionRelease, ActionSet, ActionType, ActionValue, ExecArgument, RemoteReference, ValueType } from "./actions"
 import { IMessagePort, EventData } from "./messages"
 import { Result, ResultExec, ResultSet, ResultValue, } from "./results"
 import { get, set } from './utils'
@@ -80,7 +80,21 @@ export class DataSource implements IDataSource {
 
     const args: any[] = []
     for (const execArg of action.execArgs) {
-      if (execArg.valueType === ValueType.Direct) {
+      if (execArg.valueType === ValueType.RemoteReference) {
+        console.log(action)
+        console.log(action.execArgs[0])
+        let source = this.#data
+        const { cacheKey, path }: RemoteReference = execArg.value
+        if (cacheKey) {
+          source = this.#valueCache.get(cacheKey)
+        }
+        if (path) {
+          console.log(get(source, path))
+          args.push(get(source, path))
+        } else {
+          args.push(source)
+        }
+      } else if (execArg.valueType === ValueType.Direct) {
         args.push(execArg.value)
       } else if (execArg.valueType === ValueType.FunctionReference) {
         const proxyFn = (...proxyArgs: any[]) => this.#triggerRemoteFunction(execArg.id, proxyArgs)

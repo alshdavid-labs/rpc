@@ -44,7 +44,7 @@ export interface IReferenceFunction<T extends (...args: any[]) => any> {
       { 
         [I in keyof Args]: Args[I] extends (...args: infer CallbackArgs) => infer CallbackReturnType
           ? (...args: { [I2 in keyof CallbackArgs]: IReference<CallbackArgs[I2]> & IReleasable }) => CallbackReturnType
-          : Args[I]
+          : Args[I] | IReference<Args[I]>
       } : 
       never
   ): Promise<IReference<ReturnType<T>> & IReleasable>
