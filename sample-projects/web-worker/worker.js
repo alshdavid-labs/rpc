@@ -11,6 +11,6 @@ const ref0 = new RPC.Reference(port1)
 
 // // Make a div
 const ref1 = await ref0.property('document', 'createElement').exec('div')
-await ref1.property('innerText').set('Hello')
+await ref1.property('innerText').set('Hello from Worker')
 const ref2 = await ref0.property('document', 'body', 'appendChild').exec(ref1)
 

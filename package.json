@@ -18,7 +18,8 @@
     "build:umd": "npx webpack --mode production",
     "build:types": "npx tsc -p tsconfig.types.json",
     "clean": "rm -r -f dist",
-    "test": "npx jest ./src ./tests"
+    "test": "npx jest ./src ./tests",
+    "server": "npx http-server ./ -c=-1"
   },
   "devDependencies": {
     "@types/jest": "^27.0.2",
