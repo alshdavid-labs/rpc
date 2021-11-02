@@ -21,12 +21,12 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-southeast-2
-    - name: Upload HTML to AWS
+    - name: Build and Publish
       run: |
         yarn
         yarn build
 
-        export IS_NEXT=$(node -e "console.log(require('./package.json').version.contains('-'))")
+        export IS_NEXT=$(node -e "console.log(require('./package.json').version.includes('-'))")
 
         if [ "$IS_NEXT" = "true" ]; then
           export VERSION=$(node -e "console.log(require('./package.json').version.split('-')[0].replaceAll('.', '-'))")
