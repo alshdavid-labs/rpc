@@ -36,13 +36,13 @@ jobs:
           export VERSION=$(node -e "console.log(require('./package.json').version.split('-')[0].replaceAll('.', '-'))")
           aws s3 cp ./dist/umd/index.js s3://alshdavid-public/rpc/next.js
           aws s3 cp ./dist/umd/index.js s3://alshdavid-public/rpc/next/${VERSION}.js
-          aws cloudfront create-invalidation --distribution-id E2QHY39OWRUCEU --paths /next.js
+          aws cloudfront create-invalidation --distribution-id E2QHY39OWRUCEU --paths /rpc/next.js
           npm publish --access public --tag next
         else
           export VERSION=$(node -e "console.log(require('./package.json').version.replaceAll('.', '-'))")
           aws s3 cp ./dist/umd/index.js s3://alshdavid-public/rpc/latest.js
           aws s3 cp ./dist/umd/index.js "s3://alshdavid-public/rpc/${VERSION}.js"
-          aws cloudfront create-invalidation --distribution-id E2QHY39OWRUCEU --paths /latest.js
+          aws cloudfront create-invalidation --distribution-id E2QHY39OWRUCEU --paths /rpc/latest.js
           npm publish --access public
         fi       
       env:
