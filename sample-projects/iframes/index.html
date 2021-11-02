@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <base href=".">
   <script src="https://cdn.davidalsh.com/rpc/latest.js"></script>
   <title>Host Page</title>
 </head>
@@ -11,7 +12,7 @@
   <script type="module">
     // Create an iframe
     const iframe = document.createElement('iframe')
-    iframe.src = 'http://localhost:8081/iframe.html' // cross origin
+    iframe.src = 'iframe.html'
     
     const onPort2 = new Promise(
       res => addEventListener('message', 
