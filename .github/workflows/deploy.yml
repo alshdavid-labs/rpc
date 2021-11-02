@@ -26,7 +26,7 @@ jobs:
         yarn
         yarn build
 
-        export IS_NEXT=$(node -e "console.log(require('./package.json').version.contains('-')")
+        export IS_NEXT=$(node -e "console.log(require('./package.json').version.contains('-'))")
 
         if [ "$IS_NEXT" = "true" ]; then
           export VERSION=$(node -e "console.log(require('./package.json').version.split('-')[0].replaceAll('.', '-'))")
@@ -41,3 +41,4 @@ jobs:
         fi       
       env:
         CI: true
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
