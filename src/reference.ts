@@ -9,6 +9,7 @@ class Reference {
   #messagePort: IMessagePort
   #path: Array<string>
   #cacheKey: string | undefined
+  // These are needed to tell the remote to release callback arguments
   // #remoteCachedArgs: string[]
   #isListening: boolean
   #parameterCache: Map<string, any>
