@@ -38,7 +38,7 @@ class Reference {
   }
 
   async set(value: any) {
-    const action = new ActionSet(this.path, value)
+    const action = new ActionSet(this.path, value, this.cacheKey)
     await sendAction<ResultSet>(this.#messagePort, action)
   }
 

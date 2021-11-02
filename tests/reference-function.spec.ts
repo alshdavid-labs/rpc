@@ -133,7 +133,7 @@ describe('IReferenceFunction', () => {
     expect(next).toBeCalledTimes(1)
   })
 
-  fit('Should accept reference as parameter', async () => {
+  it('Should accept reference as parameter', async () => {
     const data = { foo: 'foo', bar: jest.fn() }
     source = new DataSource(port2, data)
     const ref0 = new Reference<{ foo: string, bar: (value: string) => {} }>(port1)

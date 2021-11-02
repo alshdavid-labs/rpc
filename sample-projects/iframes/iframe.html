@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.davidalsh.com/rpc/latest.js"></script>
+  <title>Iframe</title>
+</head>
+<body>
+  <script type="module">
+    // Create and transfer ports
+    const { port1, port2 } = new MessageChannel()
+    window.parent.postMessage('PORT_TRANSFER', '*', [port2])
+    port1.start()
+
+    // Access exposed Window from host page
+    const ref0 = new RPC.Reference(port1)
+
+    // Make a div
+    const ref1 = await ref0.property('document', 'createElement').exec('div')
+    await ref1.property('innerText').set('Hello')
+    const ref2 = await ref0.property('document', 'body', 'appendChild').exec(ref1)
+  </script>
+</body>
+</html>

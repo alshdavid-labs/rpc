@@ -10,3 +10,4 @@ tsconfig.cjs.json
 tsconfig.types.json
 yarn.lock
 .npmrc
+sample-projects

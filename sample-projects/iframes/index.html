@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://cdn.davidalsh.com/rpc/latest.js"></script>
+  <title>Host Page</title>
+</head>
+<body>
+  <script type="module">
+    // Create an iframe
+    const iframe = document.createElement('iframe')
+    iframe.src = 'http://localhost:8081/iframe.html' // cross origin
+    
+    const onPort2 = new Promise(
+      res => addEventListener('message', 
+        e => e.data === 'PORT_TRANSFER' && res(e.ports[0])))
+
+    // Place it on the document and wait for a port
+    document.body.appendChild(iframe)
+    const port2 = await onPort2
+    port2.start()
+
+    // Expose the Window to it
+    const source = new RPC.DataSource(sourcePort, window)
+  </script>
+</body>
+</html>

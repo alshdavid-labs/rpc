@@ -52,48 +52,36 @@ export class DataSource implements IDataSource {
     if (action.cacheKey) {
       source = this.#valueCache.get(action.cacheKey)
     }
-    if (action.path.length) {
-      value = get(source, action.path)
-    } else {
-      value = source
-    }
-    
+
+    value = getProperty(source, action.path)   
     return new ResultValue(action.id, value)
   }
 
+  #getSource(action: { cacheKey: string | undefined }) {
+    let target = this.#data
+    if (action.cacheKey) {
+      target = this.#valueCache.get(action.cacheKey)
+    }
+    return target
+  }
+
   #onSetRequest(action: ActionSet): ResultSet {
-    set(this.#data, action.path, action.data)
+    const target = this.#getSource(action)
+    set(target, action.path, action.data)
     return new ResultSet(action.id)
   }
 
   async #onExecRequest(action: ActionExec): Promise<ResultExec> {
-    let target = this.#data
-    let cachedParams: string[] = []
-
-    if (action.cacheKey) {
-      target = this.#valueCache.get(action.cacheKey)
-    }
-
-    if (action.path.length) {
-      target = get(target, action.path)
-    }
+    const source = this.#getSource(action)
+    const target = getProperty(source, action.path)
+    const cachedParams: string[] = []
 
     const args: any[] = []
     for (const execArg of action.execArgs) {
       if (execArg.valueType === ValueType.RemoteReference) {
-        console.log(action)
-        console.log(action.execArgs[0])
-        let source = this.#data
-        const { cacheKey, path }: RemoteReference = execArg.value
-        if (cacheKey) {
-          source = this.#valueCache.get(cacheKey)
-        }
-        if (path) {
-          console.log(get(source, path))
-          args.push(get(source, path))
-        } else {
-          args.push(source)
-        }
+        const { path }: RemoteReference = execArg.value
+        const  source = this.#getSource(execArg.value)
+        args.push(getProperty(source, path))
       } else if (execArg.valueType === ValueType.Direct) {
         args.push(execArg.value)
       } else if (execArg.valueType === ValueType.FunctionReference) {
@@ -130,4 +118,23 @@ export class DataSource implements IDataSource {
     }
     this.#messagePort.postMessage<ActionExec>(new ActionExec([], execArgs, id))
   }
+}
+
+function getProperty(source: any, path: string[]) {
+  let result: any = source
+  
+  if (path.length) {
+    result = get(source, path)
+  }
+
+  if (typeof result === 'function' && path.length) {
+    let context = source
+    if (path.length > 1) {
+      context = get(source, path.splice(0, path.length - 1))
+    }
+    const fn = result
+    result = (...args: any[]) => fn.call(context, ...args)
+  }
+
+  return result
 }
