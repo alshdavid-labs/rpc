@@ -9,3 +9,4 @@ tsconfig.esm.json
 tsconfig.cjs.json
 tsconfig.types.json
 yarn.lock
+.npmrc
