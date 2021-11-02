@@ -25,7 +25,8 @@ jobs:
         echo cp1
         aws s3 cp ./dist/umd/index.js s3://alshdavid-public/rpc/latest.js
         echo cp2
-        aws s3 cp ./dist/umd/index.js s3://alshdavid-public/rpc/${VERSION}.js
+        ls ./dist/umd/
+        aws s3 cp ./dist/umd/index.js "s3://alshdavid-public/rpc/${VERSION}.js"
         echo cf1
         aws cloudfront create-invalidation --distribution-id E2QHY39OWRUCEU --paths /latest.js
       env:
