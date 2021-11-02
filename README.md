@@ -23,8 +23,8 @@ For a practical example of how this works, sample projects are available [in the
 
 These projects are also available for viewing hosted here:
 
-- [iframe example](https://cdn.davidalsh.com/rpc/sample-projects/iframes/index.js)
-- [web worker example](https://cdn.davidalsh.com/rpc/sample-projects/web-worker/index.js)
+- [iframe example](https://cdn.davidalsh.com/rpc/sample-projects/iframes/index.html)
+- [web worker example](https://cdn.davidalsh.com/rpc/sample-projects/web-worker/index.html)
 
 
 ## API
