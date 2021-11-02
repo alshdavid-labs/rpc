@@ -23,11 +23,10 @@ jobs:
         aws-region: ap-southeast-2
     - name: Build and Publish
       run: |
-        set -e
         echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
 
-        aws s3 cp ./sample-projects/* s3://alshdavid-public/rpc/sample-projects
-        aws cloudfront create-invalidation --distribution-id E2QHY39OWRUCEU --paths /rpc/sample-projects/*
+        aws s3 cp --recursive ./sample-projects s3://alshdavid-public/rpc/sample-projects
+        aws cloudfront create-invalidation --distribution-id E2QHY39OWRUCEU --paths /rpc/sample-projects/\*
 
         yarn
         yarn build
