@@ -7,7 +7,7 @@ import { ResultRelease } from "./results/result-release"
 export interface IDataSource {
   close(): void
 }
-let c = 0
+
 export class DataSource implements IDataSource {
   #data: any
   #messagePort: IMessagePort

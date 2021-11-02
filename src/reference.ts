@@ -9,7 +9,7 @@ class Reference {
   #messagePort: IMessagePort
   #path: Array<string>
   #cacheKey: string | undefined
-  #remoteCachedArgs: string[]
+  // #remoteCachedArgs: string[]
   #isListening: boolean
   #parameterCache: Map<string, any>
 
@@ -22,7 +22,7 @@ class Reference {
     this.#parameterCache = new Map()
     this.#path = path
     this.#cacheKey = cacheKey
-    this.#remoteCachedArgs = []
+    // this.#remoteCachedArgs = []
     this.#isListening = false
   }
 
