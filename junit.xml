@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="3" failures="0" errors="0" time="1.131">
-  <testsuite name="MessageChannel" errors="0" failures="0" skipped="0" timestamp="2021-11-01T11:34:42" time="1.007" tests="2">
-    <testcase classname="MessageChannel constructor should not throw" name="MessageChannel constructor should not throw" time="0.001">
+<testsuites name="jest tests" tests="8" failures="0" errors="0" time="1.288">
+  <testsuite name="IReferenceFunction" errors="0" failures="0" skipped="1" timestamp="2021-11-02T05:03:10" time="1.243" tests="8">
+    <testcase classname="IReferenceFunction Should execute a function" name="IReferenceFunction Should execute a function" time="0.009">
     </testcase>
-    <testcase classname="MessageChannel instance should send message to other port" name="MessageChannel instance should send message to other port" time="0.001">
+    <testcase classname="IReferenceFunction Should propagate a exception" name="IReferenceFunction Should propagate a exception" time="0.009">
     </testcase>
-  </testsuite>
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2021-11-01T11:34:43" time="0.071" tests="1">
-    <testcase classname=" should" name=" should" time="0">
+    <testcase classname="IReferenceFunction Should allow traversal of error in exception" name="IReferenceFunction Should allow traversal of error in exception" time="0.009">
+    </testcase>
+    <testcase classname="IReferenceFunction Should return values" name="IReferenceFunction Should return values" time="0.007">
+    </testcase>
+    <testcase classname="IReferenceFunction Should release cached returned value" name="IReferenceFunction Should release cached returned value" time="0.011">
+    </testcase>
+    <testcase classname="IReferenceFunction Should forward basic arguments to function" name="IReferenceFunction Should forward basic arguments to function" time="0.004">
+    </testcase>
+    <testcase classname="IReferenceFunction Should accept function as parameter" name="IReferenceFunction Should accept function as parameter" time="0.004">
+    </testcase>
+    <testcase classname="IReferenceFunction Should pass variables to callback as references" name="IReferenceFunction Should pass variables to callback as references" time="0">
+      <skipped/>
     </testcase>
   </testsuite>
 </testsuites>

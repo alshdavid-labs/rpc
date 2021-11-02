@@ -19,11 +19,12 @@ export class MessagePort {
 
   }
 
-  postMessage(data: any): void {
+  async postMessage(data: any): Promise<void> {
     if (!this.#active) {
       this.#startBuffer.push(data)
       return
     }
+    await new Promise(res => setTimeout(res, 0))
     this.#myPort.next(JSON.parse(JSON.stringify({ data })))
   }
 

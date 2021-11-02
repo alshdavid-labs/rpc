@@ -29,7 +29,7 @@ describe('MessageChannel', () => {
       port2.start()
     
       port1.addEventListener('message', fn)
-      port2.postMessage(MOCK_VALUE)
+      await port2.postMessage(MOCK_VALUE)
     
       expect(fn).toBeCalledTimes(1)
       expect(fn.mock.calls[0][0]).toEqual({ data: MOCK_VALUE })

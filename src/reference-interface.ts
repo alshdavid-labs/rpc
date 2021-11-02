@@ -1,5 +1,4 @@
-type PreviousNumber = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-  11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...0[]]
+type PreviousNumber = [never, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, ...0[]]
 
 type Paths<Target extends object, RecursiveDepthCounter extends number = 10> =
   [RecursiveDepthCounter] extends [never]
@@ -21,20 +20,35 @@ type PropertyAtPath<Target extends unknown, Path extends readonly unknown[]> =
               : never
           : never;
 
-type ReferenceParams<T> = T extends (...args: infer A) => infer R
-  ? (...args: { [I in keyof A]: A[I] extends object ? IReference<A[I]> : A[I]}) => R
-  : T;
-
-export interface IReference<T extends object> { 
-  property<P extends Paths<T>>(...paths: [...P]): IReference<PropertyAtPath<T, P>>;
-
-  exec(
-    ...args: T extends (...args: infer A) => any
-      ? { [I in keyof A]: ReferenceParams<A[I]> }
-      : never
-  ): T extends (...args: any) => any ? Promise<IReference<ReturnType<T>>> : any;
-  value(): T extends (...args: any) => any ? any : Promise<T>;
-  // set(value: T): Promise<void>;
-  // delete(): Promise<void>;
-  close(): void;
+export interface IReferenceObject<T extends object> {
+  property<P extends Paths<T>>(...paths: [...P]): IReferenceObject<PropertyAtPath<T, P>>
+  set(value: T): Promise<void>
+  value(): T extends (...args: any[]) => any ? never : Promise<T>
 }
+
+export interface IReferenceBasic<T> {
+  value(): Promise<T>
+}
+
+export interface IReferenceFunction<T extends (...args: any[]) => any> {
+  exec(
+    ...args: T extends (...args: infer Args) => any ? 
+      { 
+        [I in keyof Args]: Args[I] extends (...args: infer CallbackArgs) => infer CallbackReturnType
+          ? (...args: { [I2 in keyof CallbackArgs]: IReference<CallbackArgs[I2]> }) => CallbackReturnType
+          : Args[I]
+      } : 
+      never
+  ): Promise<IReference<ReturnType<T>> & { release(): void }>
+  release(): void
+}
+
+export type IReference<T> = (
+  T extends (...args: any[]) => any ? IReferenceFunction<T> :
+  T extends object ? IReferenceObject<T> :
+  IReferenceBasic<T>
+)
+
+export interface IReferenceError extends Error {
+  reference: IReference<Error>
+} 
