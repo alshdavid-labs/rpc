@@ -18,8 +18,15 @@ module.exports = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: 'ts-loader'
-      },
+        use: [
+          {
+            loader: 'ts-loader',
+            options: {
+              configFile: path.join(__dirname, 'tsconfig.esm.json'),
+            },
+          },
+        ],
+      }
     ]
   },
   resolve: {

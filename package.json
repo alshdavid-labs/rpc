@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:types",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:umd && npm run build:types",
     "build:esm": "npx tsc -p tsconfig.esm.json",
     "build:cjs": "npx tsc -p tsconfig.cjs.json",
     "build:umd": "npx webpack --mode production",
