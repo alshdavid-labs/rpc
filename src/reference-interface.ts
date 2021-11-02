@@ -20,8 +20,16 @@ type PropertyAtPath<Target extends unknown, Path extends readonly unknown[]> =
               : never
           : never;
 
+export interface IReleasable {
+  release(): void
+}
+
+export interface IMutable<T> {
+  set(value: T): Promise<void>
+}
+
 export interface IReferenceObject<T extends object> {
-  property<P extends Paths<T>>(...paths: [...P]): IReferenceObject<PropertyAtPath<T, P>>
+  property<P extends Paths<T>>(...paths: [...P]): IReference<PropertyAtPath<T, P>> & IMutable<PropertyAtPath<T, P>>
   set(value: T): Promise<void>
   value(): T extends (...args: any[]) => any ? never : Promise<T>
 }
@@ -35,11 +43,11 @@ export interface IReferenceFunction<T extends (...args: any[]) => any> {
     ...args: T extends (...args: infer Args) => any ? 
       { 
         [I in keyof Args]: Args[I] extends (...args: infer CallbackArgs) => infer CallbackReturnType
-          ? (...args: { [I2 in keyof CallbackArgs]: IReference<CallbackArgs[I2]> }) => CallbackReturnType
+          ? (...args: { [I2 in keyof CallbackArgs]: IReference<CallbackArgs[I2]> & IReleasable }) => CallbackReturnType
           : Args[I]
       } : 
       never
-  ): Promise<IReference<ReturnType<T>> & { release(): void }>
+  ): Promise<IReference<ReturnType<T>> & IReleasable>
   release(): void
 }
 

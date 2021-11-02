@@ -1,4 +1,4 @@
-import { DataSource, IReference, IReferenceError, Reference } from "../src"
+import { DataSource, IReference, IReferenceError, IReleasable, Reference } from "../src"
 import { MessageChannel, MessagePort } from "./mocks"
 
 const MOCK_VALUE = 'MOCK_VALUE'
@@ -97,19 +97,41 @@ describe('IReferenceFunction', () => {
     ref0.release()
   })
 
-  fit('Should pass variables to callback as references', async () => {
+  it('Should pass variables to callback as references', async () => {
     const data = (callback: (value: string) => void) => callback(MOCK_VALUE)
     source = new DataSource(data, port2)
     const ref0 = new Reference<typeof data>(port1)
     
-    const argRef0: IReference<string> = await new Promise(res => {
+    const argRef0: IReference<string> & IReleasable = await new Promise(res => {
       ref0.exec((arg) => res(arg))
     })
 
-    const value = await argRef0.value()
-
-    expect(value).toBe(MOCK_VALUE)
+    expect(await argRef0.value()).toBe(MOCK_VALUE)
 
     ref0.release()
+    argRef0.release()
+
+    expect(await argRef0.value()).toBe(undefined)
+  })
+
+  it('Should handling a callback in the callback', async () => {
+    const next = jest.fn()
+    const data = (cb: (n: () => any) => any) => {
+      cb(next)
+    }
+
+    source = new DataSource(data, port2)
+    const ref0 = new Reference<typeof data>(port1)
+
+    await new Promise<void>(res => {
+      ref0.exec(async (nextRef: any) => {
+        await nextRef.exec()
+        res()
+      })
+    })
+
+    expect(next).toBeCalledTimes(1)
   })
 })
+
+

@@ -7,7 +7,7 @@ import { ResultRelease } from "./results/result-release"
 export interface IDataSource {
   close(): void
 }
-
+let c = 0
 export class DataSource implements IDataSource {
   #data: any
   #messagePort: IMessagePort
@@ -70,8 +70,12 @@ export class DataSource implements IDataSource {
     let target = this.#data
     let cachedParams: string[] = []
 
+    if (action.cacheKey) {
+      target = this.#valueCache.get(action.cacheKey)
+    }
+
     if (action.path.length) {
-      target = get(this.#data, action.path)
+      target = get(target, action.path)
     }
 
     const args: any[] = []
@@ -79,7 +83,7 @@ export class DataSource implements IDataSource {
       if (execArg.valueType === ValueType.Direct) {
         args.push(execArg.value)
       } else if (execArg.valueType === ValueType.FunctionReference) {
-        const proxyFn = (...args: any[]) => this.#triggerRemoteFunction(execArg.id, args)
+        const proxyFn = (...proxyArgs: any[]) => this.#triggerRemoteFunction(execArg.id, proxyArgs)
         this.#valueCache.set(execArg.id, proxyFn)
         cachedParams.push(execArg.id)
         args.push(proxyFn)
@@ -103,11 +107,13 @@ export class DataSource implements IDataSource {
     return new ResultRelease(action.id)
   }
 
-  #triggerRemoteFunction(id: string, _args: any[]) {
+  #triggerRemoteFunction(id: string, args: any[]) {
     const execArgs: ExecArgument[] = []
-    // for (const arg of args) {
-    //   const execArg = new ExecArgument()
-    // }
+    for (const arg of args) {
+      const execArg = new ExecArgument(null, ValueType.Reference)
+      this.#valueCache.set(execArg.id, arg)
+      execArgs.push(execArg)
+    }
     this.#messagePort.postMessage<ActionExec>(new ActionExec([], execArgs, id))
   }
 }

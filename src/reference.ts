@@ -46,20 +46,15 @@ class Reference {
     for (const arg of args) {
       let execArg: ExecArgument
       if (typeof arg === 'function') {
-        this.#listenForCallback()
         execArg = new ExecArgument(null, ValueType.FunctionReference)
         this.#parameterCache.set(execArg.id, arg)
+        this.#listenForCallback()
       } else {
         execArg = new ExecArgument(arg, ValueType.Direct)
       }
       execArgs.push(execArg)
     }
-    for (const execArg of execArgs) {
-      if (execArg.valueType === ValueType.FunctionReference) {
-        
-      }
-    }
-    const action = new ActionExec(this.#path, execArgs)
+    const action = new ActionExec(this.#path, execArgs, this.#cacheKey)
     const result = await sendAction<ResultExec>(this.#messagePort, action)
     const ref = new Reference(this.#messagePort, [], action.id)
     if (result.hasThrown) {
@@ -92,7 +87,7 @@ class Reference {
     if (action.actionType === ActionType.Exec && action.cacheKey) {
       const args: any[] = []
       for (const execArg of action.execArgs) {
-        args.push(execArg.value)
+        args.push(new Reference(this.#messagePort, [], execArg.id))
       }
       const target = this.#parameterCache.get(action.cacheKey)
       target(...args)
