@@ -25,6 +25,7 @@ jobs:
       run: |
         echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > .npmrc
 
+        aws s3 rm --recursive s3://alshdavid-public/rpc/sample-projects
         aws s3 cp --recursive ./sample-projects s3://alshdavid-public/rpc/sample-projects
         aws cloudfront create-invalidation --distribution-id E2QHY39OWRUCEU --paths /rpc/sample-projects/\*
 

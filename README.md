@@ -1,6 +1,6 @@
 # JavaScript RPC Library
 
-### Workers and iFrames
+<i>Workers and iFrames</i>
 
 This library serves to be a tiny (3kb), low level RPC implementation for JavaScript that allows for the accessing of data and calling of functions/methods that live in an external context.
 
@@ -9,54 +9,101 @@ Such use cases are iframes and web workers. This can also be used with web socke
 ```typescript
 import { Reference } from '@alshdavid/rpc'
 
-// Worker Data = { foo: () => 'bar' }
+// Worker Data = { foo: 'bar' }
 const ref0 = new Reference(port1)
 
 const ref1 = ref0.property('foo')
-const ref2 = ref1.exec()
-
-const value = await ref2.value()
+const value = await ref1.value()
 console.log(value) // 'bar'
 ```
 
-## Usage
+## Sample Projects
 
-### Summary
+For a practical example of how this works, sample projects are available [in the `sample-projects` folder](./sample-projects).
 
-This is split into two halves, the half that holds the data you want to expose - known as the `DataSource` and the half that wants to consume the data. 
+These projects are also available for viewing hosted here:
 
-An example data source would be a web worker holding data that the host page wants to access. Alternatively, it could be that the web worker that wants access to the document and the host page is the data source exposing the `window` object. 
+- [iframe example](https://cdn.davidalsh.com/rpc/sample-projects/iframes/index.js)
+- [web worker example](https://cdn.davidalsh.com/rpc/sample-projects/web-worker/index.js)
 
-The consumer accesses the data using a `Reference` which points to data in the `DataSource`. The consumer can walk up an object to find data or trigger methods.
 
-#### Data Source
+## API
 
-From your Data Source (iframe, worker), expose your data
-```typescript
-import { DataSource } from '@alshdavid/rpc'
+This is split into two halves: 
 
-const data = { foo: 'bar' }
-const dataSource = new DataSource(port2, data)
-```
+The `DataSource` is the entity that has the target data in it's native context and the `Reference` is the entity that is consuming and interacting with that data.
 
-#### Consumer
+### Data Source
+
+The `DataSource` simply exposes a variable. It can be an Object, string, function, etc.
 
 ```typescript
-import { Reference } from '@alshdavid/rpc'
-
-// Connect to the DataSource and get your root reference
-const ref0 = new Reference(port1)
-
-// Crawl the tree
-const ref1 = ref0.property('foo')
-
-// Grab the value at the reference point
-const value = await ref1.value()
+// Swap MessagePorts
+const source = new DataSource(port1, { Expose: 'This' })
 ```
 
-#### Functions, Methods, Callbacks
+### Reference
 
-Functions, methods along with callback arguments. Yes, you can send function accepting function accepting functions over a serialized boundary.
+The `Reference` acts like a cursor pointer to a segment of the data stored within the remote `DataSource`. It begins at the root level and can traverse the source.
+
+```typescript
+// Swap MessagePorts
+const ref0 = new Reference(port2)
+const ref1 = ref0.property('Expose')
+const value = await ref1.value() // 'This'
+```
+
+#### Methods
+
+The `Reference` interacts with the source data using methods that observe, call or move the cursor. 
+
+```typescript
+interface IReference {
+  property(...pathSegments: string[]): IReference
+  set(value: any): Promise<void>
+  value(): Promise<unknown>
+  exec(...args: any[]): Promise<IReference>
+  release(): Promise<void>
+}
+```
+
+Different data types are eligible for different methods, for example you can not run `exec()` on a `string` as it's not a callable type, but you can use it on a function or method.
+
+|method|usage|
+|-|-|
+|`property`|This is used to traverse an object, it returns a new reference pointer to the path specified. <br><br>The originating reference pointer is kept, you can have multiple references. <br><br>Certain calls will result in cached values and those references must be manually released when done with them.
+|`set`|This is used to set a property on an object to a certain value|
+|`value`|This method will convert a `Reference` into the value held at that reference location. <br><br>It's important to remember that only serializable types can be transferred like this.<br><br>Fortunately, not all values need to be transferred. Remote function invocation can accept `Reference` types which the source will convert into the native values|
+|`exec`|This method will invoke a method or function at the current `Reference` path.<br><br>It accepts simple serializable arguments like `string`, it accepts callback functions and `Reference` types as arguments.<br><br>It will return a `Reference` to it's return value.|
+|`release`|This is used to purge the local and remote caches of values relevant to the current `Reference` cursor.<br><br>Failing to do this will result in memory leaks in both the remote and local contexts.|
+
+## Use Cases
+
+### Web Workers
+
+A Web Worker may want access to the Window object on the host page. To do this, the host page will create a `DataSource` exposing the `window` object, then the worker will create a `Reference` to that, interacting with it as required.
+
+Alternatively, if a Web Worker contains capabilities that the host page would like to interact with, then the Worker can create a `DataSource`, exposing the desired vales to the host page.
+
+It's also possible for the host page and the Worker to both be consumers and data sources, cross exporting things on either side.
+
+### iFrames
+
+Similarly to Web Workers, cross origin iframes do not have access to the host page's Window object.
+
+Using this library, it is possible to either export functionality from an iframe, consume functionality from a host page or both simultaneously.
+
+### Catches
+
+It's important to acknowledge that both entities (worker, iframe, host page) must have the RPC library installed and explicitly expose/consume capabilities from the other.
+
+This does not give unlimited access to the `DataSource` context, only limited remote execution capabilities on an explicitly exported value.
+
+## Callback function arguments
+
+Functions that accepts functions as arguments are supported by this library.
+
+_So yes, you can use function over a serialized boundary._
 
 ```typescript
 // Data = () => 'Hello World'
@@ -81,6 +128,7 @@ await ref0.exec(() => {
 })
 ```
 
+Function arguments that supply function arguments to the callback are also supported.
 ```typescript
 // Data = (callback: (next: () => void) => void) => void
 await ref0.exec(async nextRef => {
