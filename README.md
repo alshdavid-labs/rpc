@@ -6,16 +6,7 @@ This library serves to be a tiny (3kb), low level RPC implementation for JavaScr
 
 Such use cases are iframes and web workers. This can also be used with web sockets for cooperative server side execution.
 
-```typescript
-import { Reference } from '@alshdavid/rpc'
-
-// Worker Data = { foo: 'bar' }
-const ref0 = new Reference(port1)
-
-const ref1 = ref0.property('foo')
-const value = await ref1.value()
-console.log(value) // 'bar'
-```
+<!-- ![Hero](.github/hero.png) -->
 
 ## Sample Projects
 
