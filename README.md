@@ -143,7 +143,6 @@ This does not give unlimited access to the `DataSource` context, only limited re
 ## Callback function arguments
 
 Functions that accepts functions as arguments are supported by this library.
-
 _So yes, you can use function over a serialized boundary._
 
 Below are some examples with their remote implementations described
