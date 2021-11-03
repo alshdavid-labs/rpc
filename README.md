@@ -28,7 +28,7 @@ These projects are also available for viewing hosted here:
 Pretty standard npm installation
 
 ```bash
-npm install -i @alshdavid/rpc
+npm install --save @alshdavid/rpc
 ```
 
 Then import using ES Modules or CommonJS Modules <i>(Node 14+ allows for differential loading)</i>
