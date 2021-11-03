@@ -146,8 +146,11 @@ Functions that accepts functions as arguments are supported by this library.
 
 _So yes, you can use function over a serialized boundary._
 
+Below are some examples with their remote implementations described
+
 ```typescript
-// Data = () => 'Hello World'
+// const ref0 = () => 'Hello World'
+
 const resultRef = await ref0.exec()
 const value = await resultRef.value()
 
@@ -155,7 +158,8 @@ console.log(value) // 'Hello World'
 ```
 
 ```typescript
-// Data = (value) => value
+// const ref0 = (value) => value
+
 const resultRef = await ref0.exec('Hello World')
 const value = await resultRef.value()
 
@@ -163,7 +167,8 @@ console.log(value) // 'Hello World'
 ```
 
 ```typescript
-// Data = (callback) => void
+// const ref0 = (callback) => callback()
+
 await ref0.exec(() => {
   console.log('callback')
 })
@@ -171,7 +176,9 @@ await ref0.exec(() => {
 
 Function arguments that supply function arguments to the callback are also supported.
 ```typescript
-// Data = (callback: (next: () => void) => void) => void
+// const nextFunc = () => {}
+// const ref0 = (callback) => callback(nextFunc)
+
 await ref0.exec(async nextRef => {
   await nextRef.exec()
 })
