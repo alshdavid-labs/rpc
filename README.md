@@ -1,16 +1,19 @@
 # JavaScript RPC Library
 
-<i>Workers and iFrames</i>
+<b>Glue for Web Workers and iFrames</b>
 
-This library serves to be a tiny (3kb), low level RPC implementation for JavaScript that allows for the accessing of data and calling of functions/methods that live in an external context.
+This library serves to be a tiny (3kb), low level RPC implementation for JavaScript that allows for the interaction of values that exist in an external context. Think iframes and web workers.
 
-Such use cases are iframes and web workers. This can also be used with web sockets for cooperative server side execution.
-
-<!-- ![Hero](.github/hero.png) -->
+<p align="center">
+  <br>
+  <img src=".github/hero.png" />
+  <i>Accesing something on the host page from a Worker<br>Can also work the other way around</i>
+  <br>
+</p>
 
 ## Sample Projects
 
-For a practical example of how this works, sample projects are available [in the `sample-projects` folder](./sample-projects).
+For a practical example of how this works, sample projects are available in the [`sample-projects`](./sample-projects) folder.
 
 These projects are also available for viewing hosted here:
 
@@ -18,7 +21,7 @@ These projects are also available for viewing hosted here:
 - [web worker example](https://cdn.davidalsh.com/rpc/sample-projects/web-worker/index.html)
 
 
-## API
+## Library API
 
 This is split into two halves: 
 
