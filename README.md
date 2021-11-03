@@ -21,6 +21,53 @@ These projects are also available for viewing hosted here:
 - [web worker example](https://cdn.davidalsh.com/rpc/sample-projects/web-worker/index.html)
 
 
+## Installation
+
+### NPM
+
+Pretty standard npm installation
+
+```bash
+npm install -i @alshdavid/rpc
+```
+
+Then import using ES Modules or CommonJS Modules <i>(Node 14+ allows for differential loading)</i>
+```typescript
+import { DataSource, Reference } from '@alshdavid/rpc'
+const { DataSource, Reference } = require('@alshdavid/rpc')
+```
+
+### CDN
+
+You can add this directly as a `<script>` tag on your page with:
+
+```html
+<script src="https://cdn.davidalsh.com/rpc/latest.js"></script>
+<script>
+  const { DataSource, Reference } = RPC
+</script>
+```
+
+From Modules/Module Web Workers you can import the URL:
+
+```javascript
+import { DataSource, Reference } from 'https://cdn.davidalsh.com/rpc/latest.js'
+```
+
+For Web Workers that are not using modules you can use
+
+```javascript
+importScripts('https://cdn.davidalsh.com/rpc/latest.js')
+const { DataSource, Reference } = RPC
+```
+
+Alternatively you can specify the version of the library in the URL:
+```html
+<script src="https://cdn.davidalsh.com/rpc/latest.js"></script>
+<script src="https://cdn.davidalsh.com/rpc/2.0.1.js"></script>
+<script src="https://cdn.davidalsh.com/rpc/next.js"></script>
+```
+
 ## Library API
 
 This is split into two halves: 
