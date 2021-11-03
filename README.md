@@ -196,7 +196,7 @@ try {
 }
 ```
 
-#### Observed/Realized values vs Traversal
+#### Realized values vs cursor traversal
 
 Values are not accessed until `.exec()` or `.value()` are run. Traversing an object using `.property()` will not incur a communication cost.
 
