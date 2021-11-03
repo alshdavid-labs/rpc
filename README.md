@@ -191,7 +191,8 @@ Errors thrown in the data source are propagated to the consumer through the refe
 try {
   await ref0.exec()
 } catch (errorRef) {
-  console.log(await errorRef.reference.property('message').value())
+  const remoteMessage = await errorRef.reference.property('message').value()
+  console.log(remoteMessage)
 }
 ```
 
