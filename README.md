@@ -200,6 +200,8 @@ try {
 
 Values are only transferred when `.value()`, `.set()` and (when arguments are supplied) `.exec()` are called. 
 
+Calling `.property()` or `.release()` will not transfer any values.
+
 Generally, values are interacted with as references and are only transferred when the consumer requires their value within it's own context. If you attempt to transfer a type that is not serializable it will fail to send. The library will automatically convert/send callbacks to the data source as references when passed into `.exec()`, but more complex types like objects with functions will not work (at least not yet).
 
 It may be required to write some small adapters/shims to facilitate smooth API access.
