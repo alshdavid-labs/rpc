@@ -198,10 +198,11 @@ try {
 
 #### Realized values vs cursor traversal
 
-Values are not transferred until `.value()` is run. Values are interacted with as references and are only transferred when the consumer requires their value within it's own context.
-It worth being mindful that `.value()` is a dangerous method and will fail if a non serializable value is attempted to be sent.
+Values are not transferred until `.value()`, `.set()` and (when arguments are supplied) `.exec()` are run. 
 
-Traversing an object using `.property()` is safe. Function execution with `.exec()` may send a value to source if arguments are supplied. The library does its best to detect if a non transferable type is used and instead indicate to the source that it's dealing with a reference, but it cannot always do so so be mindful of more complex function signatures.
+Generally, values are interacted with as references and are only transferred when the consumer requires their value within it's own context. If you attempt to transfer a type that is not serializable it will fail to send. The library will automatically convert/send callbacks to the data source as references when passed into `.exec()`, but more complex types like objects with functions will not work (at least not yet).
+
+It may be required to write some small adapters/shims to facilitate smooth API access.
 
 ```typescript
 // Data = { foo: { bar: { foobar: 'foobar' }}}
