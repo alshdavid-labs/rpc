@@ -27,7 +27,7 @@ These projects are also available for viewing hosted here:
 
 Pretty standard npm installation
 
-```bash
+```shell
 npm install --save @alshdavid/rpc
 ```
 
