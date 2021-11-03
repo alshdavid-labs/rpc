@@ -202,9 +202,9 @@ Values are only transferred when `.value()`, `.set()` and (when arguments are su
 
 Calling `.property()` or `.release()` will not transfer any values.
 
-Generally, values are interacted with as references and are only transferred when the consumer requires the value within its own context. If you attempt to transfer a type that is not serializable it will fail to send. The library will automatically convert/send callbacks to the data source as references when passed into `.exec()`, but more complex types like objects with functions will not work (at least not yet).
+Generally, values are interacted with as references and are only transferred when the consumer requires the value within its own context. If an attempt to transfer a type that is not serializable is made, it will fail to send. 
 
-It may be required to write some small adapters/shims to facilitate smooth API access.
+The library will automatically convert/send callbacks to the data source as references when passed into `.exec()`, but more complex types like objects with functions will not work (at least not yet). It may be required to write some small adapters/shims to facilitate smooth API access.
 
 ```typescript
 // Data = { foo: { bar: { foobar: 'foobar' }}}
