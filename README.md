@@ -217,47 +217,78 @@ const foobar = await ref2.value() // Now get the value there
 
 #### Memory Management
 
-There might be some improvements I can make here with time, but for now certain calls will incur a memory cost as certain values are stored on either side.
+There might be some improvements I can make here with time, but for now it's important to `.release()` references that are cached in the `DataSource`.
 
-Things like function return values, callback function values, callback parameters, are all cached and must be manually purged when no longer needed
+The types of values that are cached include:
+- function return values 
+- callback functions
+- callback parameters
+
+These are associated with their `Reference` and must be manually purged when no longer needed to avoid memory leaks.
 
 ```typescript
-// Data = () => 'Hello World'
+// const ref0 = () => 'Hello World'
 
 const returnValueRef = await ref0.exec()
-console.log(await returnValueRef.value()) // 'Hello World'
 
-await returnValueRef.release() // Purge the cache for this return value
+// The reference inside the DataSource for the return value
+// is associated with the returned Reference on the consumer
+// The consumer may use this value for as long as the value
+// remains in the data source
+const helloWorld = await returnValueRef.value()
+console.log(helloWorld) // 'Hello World'
 
-console.log(await returnValueRef.value()) // undefined
+// Once the consumer no longer needs the value they are 
+// required to manually purge values associated with their
+// Reference by calling the following method
+await returnValueRef.release()
+
+// Subsequent attempts to access a released value will
+// result in an undefined value being returned
+const secondHelloWorld = await returnValueRef.value()
+console.log(secondHelloWorld) // undefined
 ```
 
 ```typescript
-// Data = (callback: (foo, bar) => void) => void
+// const fooFn = () => {}
+// const barFn = () => {}
+// const ref0 = (callback) => callback(fooFn, barFn)
 
 const returnValueRef = await ref0.exec(async (fooRef, barRef) => {
+  // In situations where values are provided as callback arguments
+  // the values must be released from within the callback
   console.log(await fooRef.value()) // 'foo'
   console.log(await barRef.value()) // 'bar'
+
+  await fooRef.release()
+  await barRef.release()
 })
 
-ref0.release() // This will purge the 'foo' and 'bar' variables
+// The callback also needs to be released
+// This may be changed in the future
+ref0.release()
 ```
 
 ### MessagePorts
 
 The base API uses the browser `MessagePort` as the communication interface, so transfer your ports between your entities and you're good to go.
+It's usually best to send the port from the `iframe` to the host page rather than the other way around.
 
 ```typescript
 import { Reference } from '@alshdavid/rpc'
 
-const { port1, port2 } = new MessageChannel()
-
 const iframe = document.createElement('iframe')
-iframe.src = 'https://my-external-app'
-iframe.contentWindow.postMessage('ports', '*', [port2])
+iframe.src = 'https://external-origin.com/iframe.html'
 
-const ref0 = new Reference(port1)
-port1.start()
+const onPort2 = new Promise(
+  res => addEventListener('message', 
+    e => e.data === 'PORT_TRANSFER' && res(e.ports[0])))
+
+document.body.appendChild(iframe)
+const port2 = await onPort2
+port2.start()
+
+const source = new Reference(port2, window)
 ```
 
 
